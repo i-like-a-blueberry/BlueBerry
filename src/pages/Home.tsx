@@ -1,44 +1,77 @@
-import { useState } from 'react'
-import { NewButton } from "../ui";
-import { Box } from "@chakra-ui/react";
+import { useState, useEffect } from 'react'
+import { NewButton, BodyContainer } from "../ui";
+import Receipt from '../component/Receipt';
+import { Box, useToast, Input } from "@chakra-ui/react";
+import { getRepos, getLangs } from '../api';
+import errorHandler from '../api/errorHandling';
 
 const Home = () => {
-    const [name, setName] = useState('')
+    const [name, setName] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const toast = useToast();
 
-    function onsubmit() {
-        fetch('https://api.github.com/users/YuSa0-6/repos')
-            .then(result => result.json())
-            .then((output) => {
-                console.log('Output: ', output);
+    const resStatus = () => {
+        toast({
+            title: 'error',
+            description: "please input valid username",
+            status: 'error',
+            duration: 9000,
+            isClosable: true,
+        })
+    }
 
-            }).catch(err => console.error(err));
+    const langsSum = async (data: any) => {
+        const  repoLangs: object[] = [];
+        for (let i = 0; i < data.length; i++) {
+            const langsUrl: string = data[i].languages_url;
+            const langs: { data: string[] } = await getLangs(langsUrl);
+            repoLangs.push(langs.data);
+        }
+        const langBytes: object = {}
+        for (let i = 0; i < repoLangs.length; i++) {
+            
+        }
+        console.log(repoLangs)
+    }
+
+    const onsubmit = async () => {
+        setIsLoading(true);
+        if (name) {
+            const res = await getRepos(name).catch((error) => {
+                errorHandler(error);
+            });
+            if (res) {
+                const data = res.data;
+                await langsSum(data);
+                setIsLoading(false);
+                return;
+            }
+        }
+        setIsLoading(false);
+        resStatus()
     }
 
 
     const handleSubmit = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         e.preventDefault();
-        console.log({
-            name
-        });
+        //   console.log({
+        //       name
+        //   });
     };
 
-    const handleChangeName = (e: React.MouseEvent<HTMLElement, MouseEvent> | any) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
-    }
+    };
+
 
     return (
-        <div>
-            <h1>Home</h1>'
+        <BodyContainer>
             <Box>hello</Box>
-            <NewButton onClick={onsubmit}>aaa</NewButton>
-            {/* <form onSubmit={handleSubmit}>
-                <input
-                type="text"
-                >
-
-                </input>
-            </form> */}
-        </div>
+            <NewButton isLoading={isLoading} onClick={onsubmit}>send</NewButton>
+            <Input type="text" value={name} onChange={handleInputChange} />
+            <button type='submit'>Send</button>
+            <Receipt />
+        </BodyContainer>
     )
 }
 
