@@ -13,6 +13,6 @@ export const NewButton: FC<NewButtonProps> = ({ children, onClick, isLoading }) 
 
 export const BodyContainer: FC<BodyContainerProps> = ({ children }) => {
     return (
-        <Box textAlign={'center'} m='0 24px'>{children}</Box>
+        <Box alignItems={'center'} display={'flex'} flexDir={'column'} justifyContent={'center'} >{children}</Box>
     )
 }

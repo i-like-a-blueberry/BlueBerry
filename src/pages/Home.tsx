@@ -5,9 +5,14 @@ import { Box, useToast, Input } from "@chakra-ui/react";
 import { getRepos, getLangs } from '../api';
 import errorHandler from '../api/errorHandling';
 
+interface LangData {
+    [key: string]: number;
+}
+
 const Home = () => {
     const [name, setName] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [langUsed, setLangUsed] = useState<object>({});
     const toast = useToast();
 
     const resStatus = () => {
@@ -20,18 +25,30 @@ const Home = () => {
         })
     }
 
-    const langsSum = async (data: any) => {
-        const  repoLangs: object[] = [];
+    const langsSum = async (data: { languages_url: string }[]) => {
+        const repoLangs: LangData[] = [];
         for (let i = 0; i < data.length; i++) {
             const langsUrl: string = data[i].languages_url;
-            const langs: { data: string[] } = await getLangs(langsUrl);
+            const langs: { data: LangData } = await getLangs(langsUrl);
             repoLangs.push(langs.data);
         }
-        const langBytes: object = {}
+
+        let langBytes: object = {}
         for (let i = 0; i < repoLangs.length; i++) {
-            
+            const repoLang: LangData = repoLangs[i];
+            Object.keys(repoLangs[i]).forEach((key) => {
+                if (langBytes[key as keyof object] !== undefined) {
+                    const val = Number(langBytes[key as keyof object]) + Number(repoLang[key]);
+                    langBytes = { ...langBytes, [key]: val }
+
+                } else {
+                    langBytes = { ...langBytes, [key]: repoLang[key] };
+                }
+            })
         }
-        console.log(repoLangs)
+
+        setLangUsed(langBytes);
+        console.log(langBytes)
     }
 
     const onsubmit = async () => {
@@ -63,14 +80,15 @@ const Home = () => {
         setName(e.target.value);
     };
 
+    useEffect(() => {
+    }, [])
 
     return (
         <BodyContainer>
-            <Box>hello</Box>
+            <Box>hello{name}</Box>
             <NewButton isLoading={isLoading} onClick={onsubmit}>send</NewButton>
             <Input type="text" value={name} onChange={handleInputChange} />
-            <button type='submit'>Send</button>
-            <Receipt />
+            <Receipt langs={langUsed}/>
         </BodyContainer>
     )
 }

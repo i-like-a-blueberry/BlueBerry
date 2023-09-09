@@ -1,53 +1,93 @@
-import { Card, CardBody, Text, } from "@chakra-ui/react";
-const Receipt = () => {
-    const title = "Blue Berry"
-    const subtitle = "より最適な情報をあなたに";
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = d.getMonth() + 1;
-    const day = d.getDate();
-    const hour = d.getHours();
-    const minutes = d.getMinutes();
+import { Card, CardBody, Text, Spacer, Flex, Box } from "@chakra-ui/react";
+import { Day } from "../api/day";
+
+type Props = {
+    langs: object[]
+}
+
+// const BorderLine = {
+//     background-size: "12px 4px",
+//     background-image: "linear-gradient(to right, #000000 6px, transparent 6px)",
+//     background-repeat: "repeat-x",
+//     background-position: "left bottom"
+//     padding-bottom: "5px"
+// }
+
+const Receipt = ({ langs }: Props) => {
+
     return (
-        <Card>
+        <Card aspectRatio={' 2 / 5'} shadow='md'>
             <CardBody
+                maxHeight={'60'}
                 borderStyle="solid"
                 borderWidth="5px"
                 borderColor="black"
+                margin={'24px 24px 0px 24px'}
             >
                 <Text>
                     親切なアプリ
                 </Text>
                 <Text
-                    fontSize={"6xl"}
+                    fontSize={"8xl"}
                     fontWeight="bold"
-                >{title}
+                    fontFamily={"Comic Sans MS"}
+                >
+                    BlueBerry
                 </Text>
                 <Text>
-                    {subtitle}
+                    より最適な情報をあなたに
                 </Text>
             </CardBody>
-            <Text>
-                ☆☆☆毎度ご利用ありがとうございます☆☆☆
-            </Text>
-            <Text>
-                {`${year}年${month}月${day}日  ${hour}時${minutes}分`}
-            </Text>
-            <Text
-            borderStyle="solid"
-            borderWidth="2px"
-            borderColor="black"
-            ml={"40vh"}
-            mr={"40vh"}
-            fontSize="2xl"
-            fontWeight="bold"
+            <CardBody
+            // borderBottom={"2px dotted black"}
             >
-                ご利用明細
-            </Text>
-            <Text>
-                {}
-            </Text>
-
+                <Text textAlign={"center"}>
+                    ☆☆☆毎度ご利用ありがとうございます☆☆☆
+                </Text>
+                <Text textAlign={'left'}>
+                    <Day />
+                </Text>
+                <Text
+                    borderStyle="solid"
+                    borderWidth="2px"
+                    borderColor="black"
+                    fontSize="3xl"
+                    fontWeight="bold"
+                    textAlign={"center"}
+                    mr={"30%"}
+                    ml={"30%"}
+                >
+                    ご利用明細
+                </Text>
+                <Flex>
+                    <Text>
+                        Languages
+                    </Text>
+                    <Spacer />
+                    <Text>
+                        Bytes
+                    </Text>
+                </Flex>
+                {(() => {
+                    if (langs != null) {
+                        return (
+                            <>
+                                {Object.keys(langs).map((key, i) => {
+                                    return (
+                                        <Box display={'flex'} key={i}>
+                                            <Text> {key}</Text>
+                                            <Spacer />
+                                            <Text> {`${langs[key as keyof object]}`} bytes</Text>
+                                        </Box>
+                                    )
+                                })}
+                            </>
+                        )
+                    }
+                })()}
+            </CardBody>
+            {/*  お会計*/}
+            <span></span>
         </Card>
     )
 }
