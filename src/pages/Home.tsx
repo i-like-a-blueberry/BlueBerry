@@ -4,6 +4,7 @@ import Receipt from '../component/Receipt';
 import { Box, useToast, Input } from "@chakra-ui/react";
 import { getRepos, getLangs } from '../api';
 import errorHandler from '../api/errorHandling';
+import NavBar from '../component/NavBar';
 
 interface LangData {
     [key: string]: number;
@@ -84,12 +85,15 @@ const Home = () => {
     }, [])
 
     return (
-        <BodyContainer>
-            <Box>hello{name}</Box>
-            <NewButton isLoading={isLoading} onClick={onsubmit}>send</NewButton>
-            <Input type="text" value={name} onChange={handleInputChange} />
-            <Receipt langs={langUsed}/>
-        </BodyContainer>
+		<Box>
+			<NavBar />	
+        	<BodyContainer>
+        	    <Box>hello{name}</Box>
+        	    <NewButton isLoading={isLoading} onClick={onsubmit}>send</NewButton>
+        	    <Input type="text" value={name} onChange={handleInputChange} />
+        	    <Receipt langs={langUsed}/>
+        	</BodyContainer>
+		</Box>
     )
 }
 

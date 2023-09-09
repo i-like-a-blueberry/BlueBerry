@@ -1,6 +1,6 @@
 import { Button, Box } from "@chakra-ui/react";
 import { FC } from 'react'
-import { NewButtonProps, BodyContainerProps } from "./type";
+import { NewButtonProps, BodyContainerProps, GhostButtonProps } from "./type";
 
 
 export const NewButton: FC<NewButtonProps> = ({ children, onClick, isLoading }) => {
@@ -11,8 +11,18 @@ export const NewButton: FC<NewButtonProps> = ({ children, onClick, isLoading }) 
     )
 }
 
+
 export const BodyContainer: FC<BodyContainerProps> = ({ children }) => {
     return (
         <Box alignItems={'center'} display={'flex'} flexDir={'column'} justifyContent={'center'} >{children}</Box>
     )
+}
+
+
+export const GhostButton: FC<GhostButtonProps> = ({ children, underlined }) => {
+	return (
+		<Button m="0 8px" p="0" isAttached={true} variant="ghost" borderRadius="0%" borderBottom={underlined? "solid black 2px" : ""}>
+			{ children }
+		</Button>
+	)
 }
