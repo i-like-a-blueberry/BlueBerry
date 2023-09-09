@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Box, Button, Text } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { GhostButton } from '../ui';
 import { useLocation } from "react-router-dom";
 
@@ -10,7 +10,7 @@ const NavBar = () => {
 		<Box background="#7e77e2" >
 			<Box p="4px 32px">
 				<Text color="white" fontSize="3xl" fontWeight="bold" fontFamily="comic sans ms">
-					BlueBerry	
+					BlueBerry
 				</Text>
 			</Box>
 			<Box p="0 32px" background="white" shadow="md">
@@ -24,7 +24,7 @@ const NavBar = () => {
 						みんなのレシート
 					</GhostButton>
 				</Link>
-				<Link to="trend">
+				<Link to="/trend">
 					<GhostButton underlined={pathname == "/trend"}>
 						トレンド
 					</GhostButton>

@@ -86,7 +86,6 @@ const Home = () => {
 
     return (
 		<Box>
-			<NavBar />	
         	<BodyContainer>
         	    <Box>hello{name}</Box>
         	    <NewButton isLoading={isLoading} onClick={onsubmit}>send</NewButton>

@@ -1,30 +1,22 @@
-import { useRoutes } from "react-router-dom";
-import React from 'react';
+import { Routes, Route } from 'react-router-dom'
 import Home from "./pages/Home";
-import NotFound from "./pages/NotFound";
+import Everyones from './pages/Everyones';
+import Trend from './pages/Trend';
+import NotFound from './pages/NotFound';
+import NavBar from './component/NavBar';
 
-export const App: React.FC = () => {
-    const router = useRoutes(
-	[{
-		path: '/',
-		element: <Home />,
-		children: [
-			{
-				path: 'everyones',
-				element: <Home />
-			},
-			{
-				path: 'trend',
-				element: <Home />
-			},
-         	{
-               	path: '*',
-               	element: <NotFound />
-           	}
-		]},
-	])
-
-    return router;
+const App = () => {
+	return (
+		<div className="App">
+			<NavBar />
+			<Routes>
+				<Route path='/' element={<Home />} />
+				<Route path='/everyones' element={<Everyones />} />
+				<Route path='/trend' element={<Trend />} />
+				<Route path='*' element={<NotFound />} />
+			</Routes>
+		</div>
+	)
 }
 
 export default App;
