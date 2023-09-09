@@ -9,3 +9,8 @@ export type NewButtonProps = {
 export type BodyContainerProps = {
     children: ReactNode,
 }
+ 
+export type GhostButtonProps = {
+		children: ReactNode,
+		underlined: boolean | undefined
+}
