@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { NewButton, BodyContainer } from "../ui";
 import Receipt from '../component/Receipt';
-import { Box, useToast, Input } from "@chakra-ui/react";
+import { Box, useToast, Input, Text, IconButton } from "@chakra-ui/react";
 import { getRepos, getLangs } from '../api';
 import errorHandler from '../api/errorHandling';
 import NavBar from '../component/NavBar';
+import { RepeatIcon } from '@chakra-ui/icons';
+import { useNavigate } from "react-router-dom";
+
 
 interface LangData {
     [key: string]: number;
@@ -14,7 +17,9 @@ const Home = () => {
     const [name, setName] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [langUsed, setLangUsed] = useState<object>({});
+	const [isSucceeded, setIsSucceeded] = useState<boolean>(false);
     const toast = useToast();
+	const navigate = useNavigate();
 
     const resStatus = () => {
         toast({
@@ -25,6 +30,7 @@ const Home = () => {
             isClosable: true,
         })
     }
+
 
     const langsSum = async (data: { languages_url: string }[]) => {
         const repoLangs: LangData[] = [];
@@ -52,21 +58,25 @@ const Home = () => {
         console.log(langBytes)
     }
 
+
     const onsubmit = async () => {
         setIsLoading(true);
         if (name) {
             const res = await getRepos(name).catch((error) => {
+				resStatus();
+				console.log("ejdfjdlsa;jfdkls;ajfdk;lsa")
                 errorHandler(error);
             });
             if (res) {
                 const data = res.data;
                 await langsSum(data);
                 setIsLoading(false);
+				setIsSucceeded(true);
                 return;
             }
         }
         setIsLoading(false);
-        resStatus()
+        resStatus();
     }
 
 
@@ -86,11 +96,31 @@ const Home = () => {
 
     return (
 		<Box>
-        	<BodyContainer>
-        	    <Box>hello{name}</Box>
-        	    <NewButton isLoading={isLoading} onClick={onsubmit}>send</NewButton>
-        	    <Input type="text" value={name} onChange={handleInputChange} />
-        	    <Receipt langs={langUsed}/>
+        	<BodyContainer width={"480px"}>
+								{(() => {
+					if(!isSucceeded){
+						return (
+							<>
+								<Text fontSize={"2xl"}  m="16px 0">
+									あなたの技術スタックをレシートにする
+								</Text>
+        	    				<Input type="text" value={name} variant={"filled"} placeholder={"your GitHub ID"} onChange={handleInputChange} />
+								<Box pt={"40px"}>
+        	    					<NewButton isLoading={isLoading} onClick={onsubmit}>
+										レシートを発行する
+									</NewButton>
+								</Box>
+							</>
+						)
+					} else {
+						return (
+							<>
+								<IconButton onClick={() => navigate(0)}  icon={<RepeatIcon />}/>
+        	   					<Receipt langs={langUsed}/>
+							</>
+						)
+					}
+				})()}
         	</BodyContainer>
 		</Box>
     )

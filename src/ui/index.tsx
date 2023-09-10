@@ -5,16 +5,16 @@ import { NewButtonProps, BodyContainerProps, GhostButtonProps } from "./type";
 
 export const NewButton: FC<NewButtonProps> = ({ children, onClick, isLoading }) => {
     return (
-        <Button isLoading={isLoading || false} color='white' background={'red'} onClick={onClick}>
+        <Button isLoading={isLoading || false} color='white' background={'red'}  onClick={onClick}>
             {children}
         </Button>
     )
 }
 
 
-export const BodyContainer: FC<BodyContainerProps> = ({ children }) => {
+export const BodyContainer: FC<BodyContainerProps> = ({ children, width }) => {
     return (
-        <Box alignItems={'center'} display={'flex'} flexDir={'column'} justifyContent={'center'} >{children}</Box>
+        <Box  alignItems={'center'} display={'flex'} flexDir={'column'} justifyContent={'center'} maxWidth={width} width={"100%"} m={"auto"}>{children}</Box>
     )
 }
 
