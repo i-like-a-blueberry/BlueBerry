@@ -8,6 +8,7 @@ export type NewButtonProps = {
 
 export type BodyContainerProps = {
     children: ReactNode,
+	width: string | undefined
 }
  
 export type GhostButtonProps = {
