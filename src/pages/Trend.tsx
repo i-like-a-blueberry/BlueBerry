@@ -3,36 +3,36 @@ import { BodyContainer } from '../ui';
 import { db } from '../config/firebase';
 import { collection, getDocs } from '@firebase/firestore';
 import Receipt from '../component/Receipt';
+import TrendReceipt from "../component/TrendReceipt";
 
-const Everyones = () => {
+
+
+
+const Trend = () => {
   const [receipts, setReceipts] = useState<string[]>([]);
 
   useEffect(() => {
     const receiptsCollectionRef = collection(db, 'receipts')
     getDocs(receiptsCollectionRef).then((querySnapshot) => {
       setReceipts(
-      querySnapshot.docs.foreach((doc) => {
-        const data = doc.data();
+        querySnapshot.docs.foreach((doc) => {
+          const data = doc.data();
 
-        for (const filled in data) {
-          if (filled in counts) {
-            counts
+          for (const filled in data) {
+            if (filled in counts) {
+              counts
+            }
           }
         }
-      }
-      )
+        )
       );
     });
   }, []);
+
   return (
     <BodyContainer>
-      <>
-      {receipts.map((receipts) => (
-        <Receipt langs={receipts} />
-      ))}
-      </>
+      <TrendReceipt />
     </BodyContainer>
   )
 }
-
-export default Everyones
+export default Trend;
