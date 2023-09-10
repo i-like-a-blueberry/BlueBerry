@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { NewButton, BodyContainer } from "../ui";
 import Receipt from '../component/Receipt';
 import { Box, useToast, Input, Text, IconButton } from "@chakra-ui/react";
@@ -6,6 +6,7 @@ import { getRepos, getLangs } from '../api';
 import errorHandler from '../api/errorHandling';
 import { RepeatIcon } from '@chakra-ui/icons';
 import { useNavigate } from "react-router-dom";
+import { addReceipt } from '../api/addReceipt';
 
 
 interface LangData {
@@ -52,7 +53,7 @@ const Home = () => {
                 }
             })
         }
-
+        addReceipt(langBytes, name);
         setLangUsed(langBytes);
         console.log(langBytes)
     }
@@ -89,13 +90,10 @@ const Home = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
     };
-
-    useEffect(() => {
-    }, [])
-
+    
     return (
 		<Box>
-        	<BodyContainer width={"480px"}>
+        	<BodyContainer width={"100%"}>
 								{(() => {
 					if(!isSucceeded){
 						return (
