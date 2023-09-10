@@ -11,7 +11,7 @@ const Everyones = () => {
     const receiptsCollectionRef = collection(db, 'receipts')
     getDocs(receiptsCollectionRef).then((querySnapshot) => {
       setReceipts(
-      querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      querySnapshot.docs.map((doc) => ({ ...doc.data()}))
       );
     });
   }, []);

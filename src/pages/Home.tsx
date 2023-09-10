@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { NewButton, BodyContainer } from "../ui";
 import Receipt from '../component/Receipt';
 import { Box, useToast, Input, Text, IconButton, Flex, Spacer } from "@chakra-ui/react";
@@ -6,8 +6,8 @@ import { getRepos, getLangs } from '../api';
 import errorHandler from '../api/errorHandling';
 import { RepeatIcon, DownloadIcon } from '@chakra-ui/icons';
 import { useNavigate } from "react-router-dom";
+import { addReceipt } from '../api/addReceipt';
 import * as htmlToImage from "html-to-image";
-import Tweet from "../component/TwitterLink"
 
 interface LangData {
     [key: string]: number;
@@ -17,9 +17,9 @@ const Home = () => {
     const [gitHubId, setGitHubId] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [langUsed, setLangUsed] = useState<object>({});
-	const [isSucceeded, setIsSucceeded] = useState<boolean>(false);
+    const [isSucceeded, setIsSucceeded] = useState<boolean>(false);
     const toast = useToast();
-	const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const resStatus = () => {
         toast({
@@ -31,15 +31,15 @@ const Home = () => {
         })
     }
 
-	const toPng = () => {
-		htmlToImage.toPng(document.getElementById(gitHubId))
-			.then(function (dataUrl){
-				const a = document.createElement('a')
-				a.download = 'Image.png';
-    			a.href = dataUrl;
-    			a.click();
-			})
-	}
+    const toPng = () => {
+        htmlToImage.toPng(document.getElementById(gitHubId))
+            .then(function (dataUrl: string) {
+                const a = document.createElement('a')
+                a.download = 'Image.png';
+                a.href = dataUrl;
+                a.click();
+            })
+    }
 
 
     const langsSum = async (data: { languages_url: string }[]) => {
@@ -63,7 +63,7 @@ const Home = () => {
                 }
             })
         }
-
+        addReceipt(langBytes, name);
         setLangUsed(langBytes);
         console.log(langBytes)
     }
@@ -73,15 +73,15 @@ const Home = () => {
         setIsLoading(true);
         if (gitHubId) {
             const res = await getRepos(gitHubId).catch((error) => {
-				resStatus();
-				console.log("ejdfjdlsa;jfdkls;ajfdk;lsa")
+                resStatus();
+                console.log("ejdfjdlsa;jfdkls;ajfdk;lsa")
                 errorHandler(error);
             });
             if (res) {
                 const data = res.data;
                 await langsSum(data);
                 setIsLoading(false);
-				setIsSucceeded(true);
+                setIsSucceeded(true);
                 return;
             }
         }
@@ -98,40 +98,38 @@ const Home = () => {
         setGitHubId(e.target.value);
     };
 
-    useEffect(() => {}, [])
-
     return (
-        	<BodyContainer width={"400px"}>
-								{(() => {
-					if(!isSucceeded){
-						return (
-							<>
-								<Text fontSize={"2xl"}  m="16px 0">
-									あなたの技術スタックをレシートにする
-								</Text>
-        	    				<Input type="text" value={gitHubId} variant={"filled"} placeholder={"your GitHub ID"} onChange={handleInputChange} />
-								<Box pt={"40px"}>
-        	    					<NewButton isLoading={isLoading} onClick={onsubmit}>
-										レシートを発行する
-									</NewButton>
-								</Box>
-							</>
-						)
-					} else {
-						return (
-							<>
-								<Flex w="100%" m="8px 0">
-									<IconButton shadow="md" mr="8px"  onClick={() => navigate(0)}  icon={<RepeatIcon />}/>
-									<IconButton shadow="md" colorScheme="teal" onClick={() => toPng()} icon={<DownloadIcon />} />
-								</Flex>
-        	   					<Box id={gitHubId}>	
-									<Receipt langs={langUsed} gitHubId={gitHubId}/>
-								</Box>
-							</>
-						)
-					}
-				})()}
-        	</BodyContainer>
+        <BodyContainer width={"400px"}>
+            {(() => {
+                if (!isSucceeded) {
+                    return (
+                        <>
+                            <Text fontSize={"2xl"} m="16px 0">
+                                あなたの技術スタックをレシートにする
+                            </Text>
+                            <Input type="text" value={gitHubId} variant={"filled"} placeholder={"your GitHub ID"} onChange={handleInputChange} />
+                            <Box pt={"40px"}>
+                                <NewButton isLoading={isLoading} onClick={onsubmit}>
+                                    レシートを発行する
+                                </NewButton>
+                            </Box>
+                        </>
+                    )
+                } else {
+                    return (
+                        <>
+                            <Flex w="100%" m="8px 0">
+                                <IconButton shadow="md" mr="8px" onClick={() => navigate(0)} icon={<RepeatIcon />} />
+                                <IconButton shadow="md" colorScheme="teal" onClick={() => toPng()} icon={<DownloadIcon />} />
+                            </Flex>
+                            <Box id={gitHubId}>
+                                <Receipt langs={langUsed} gitHubId={gitHubId} />
+                            </Box>
+                        </>
+                    )
+                }
+            })()}
+        </BodyContainer>
     )
 }
 
