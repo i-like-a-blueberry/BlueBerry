@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react'
 import { NewButton, BodyContainer } from "../ui";
 import Receipt from '../component/Receipt';
-import { Box, useToast, Input, Text, IconButton } from "@chakra-ui/react";
+import { Box, useToast, Input, Text, IconButton, Flex, Spacer } from "@chakra-ui/react";
 import { getRepos, getLangs } from '../api';
 import errorHandler from '../api/errorHandling';
-import { RepeatIcon } from '@chakra-ui/icons';
+import { RepeatIcon, DownloadIcon } from '@chakra-ui/icons';
 import { useNavigate } from "react-router-dom";
-
+import * as htmlToImage from "html-to-image";
 
 interface LangData {
     [key: string]: number;
 }
 
 const Home = () => {
-    const [name, setName] = useState<string>("");
+    const [gitHubId, setGitHubId] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [langUsed, setLangUsed] = useState<object>({});
 	const [isSucceeded, setIsSucceeded] = useState<boolean>(false);
@@ -29,6 +29,16 @@ const Home = () => {
             isClosable: true,
         })
     }
+
+	const toPng = () => {
+		htmlToImage.toPng(document.getElementById(gitHubId))
+			.then(function (dataUrl){
+				const a = document.createElement('a')
+				a.download = 'Image.png';
+    			a.href = dataUrl;
+    			a.click();
+			})
+	}
 
 
     const langsSum = async (data: { languages_url: string }[]) => {
@@ -60,8 +70,8 @@ const Home = () => {
 
     const onsubmit = async () => {
         setIsLoading(true);
-        if (name) {
-            const res = await getRepos(name).catch((error) => {
+        if (gitHubId) {
+            const res = await getRepos(gitHubId).catch((error) => {
 				resStatus();
 				console.log("ejdfjdlsa;jfdkls;ajfdk;lsa")
                 errorHandler(error);
@@ -81,21 +91,16 @@ const Home = () => {
 
     const handleSubmit = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         e.preventDefault();
-        //   console.log({
-        //       name
-        //   });
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setName(e.target.value);
+        setGitHubId(e.target.value);
     };
 
-    useEffect(() => {
-    }, [])
+    useEffect(() => {}, [])
 
     return (
-		<Box>
-        	<BodyContainer width={"480px"}>
+        	<BodyContainer width={"400px"}>
 								{(() => {
 					if(!isSucceeded){
 						return (
@@ -103,7 +108,7 @@ const Home = () => {
 								<Text fontSize={"2xl"}  m="16px 0">
 									あなたの技術スタックをレシートにする
 								</Text>
-        	    				<Input type="text" value={name} variant={"filled"} placeholder={"your GitHub ID"} onChange={handleInputChange} />
+        	    				<Input type="text" value={gitHubId} variant={"filled"} placeholder={"your GitHub ID"} onChange={handleInputChange} />
 								<Box pt={"40px"}>
         	    					<NewButton isLoading={isLoading} onClick={onsubmit}>
 										レシートを発行する
@@ -114,14 +119,18 @@ const Home = () => {
 					} else {
 						return (
 							<>
-								<IconButton onClick={() => navigate(0)}  icon={<RepeatIcon />}/>
-        	   					<Receipt langs={langUsed}/>
+								<Flex w="100%" m="8px 0">
+									<IconButton shadow="md" mr="8px"  onClick={() => navigate(0)}  icon={<RepeatIcon />}/>
+									<IconButton shadow="md" colorScheme="teal" onClick={() => toPng()} icon={<DownloadIcon />} />
+								</Flex>
+        	   					<Box id={gitHubId}>	
+									<Receipt langs={langUsed}/>
+								</Box>
 							</>
 						)
 					}
 				})()}
         	</BodyContainer>
-		</Box>
     )
 }
 

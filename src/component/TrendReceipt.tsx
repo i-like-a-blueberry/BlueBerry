@@ -6,15 +6,15 @@ type Props = {
 }
 
 
-const Receipt = ({ langs }: Props) => {
-
+const TrendReceipt = () => {
     return (
-        <Card  shadow='md'>
+        <Card aspectRatio={' 2 / 5'} shadow='md'>
             <CardBody
+                maxHeight={'60'}
                 borderStyle="solid"
                 borderWidth="5px"
                 borderColor="black"
-                margin={'24px 24px 0 24px'}
+                margin={'24px 24px 0px 24px'}
             >
                 <Text>
                     親切なアプリ
@@ -30,9 +30,7 @@ const Receipt = ({ langs }: Props) => {
                     より最適な情報をあなたに
                 </Text>
             </CardBody>
-            <CardBody
-            // borderBottom={"2px dotted black"}
-            >
+            <CardBody>
                 <Text textAlign={"center"}>
                     ☆☆☆毎度ご利用ありがとうございます☆☆☆
                 </Text>
@@ -60,28 +58,10 @@ const Receipt = ({ langs }: Props) => {
                         Bytes
                     </Text>
                 </Flex>
-                {(() => {
-                    if (langs != null) {
-                        return (
-                            <>
-                                {Object.keys(langs).map((key, i) => {
-                                    return (
-                                        <Box display={'flex'} key={i}>
-                                            <Text> {key}</Text>
-                                            <Spacer />
-                                            <Text> {`${langs[key as keyof object]}`} bytes</Text>
-                                        </Box>
-                                    )
-                                })}
-                            </>
-                        )
-                    }
-                })()}
-            </CardBody>
+			</CardBody>
             {/*  お会計*/}
-            <span></span>
         </Card>
     )
 }
 
-export default Receipt;
+export default TrendReceipt;

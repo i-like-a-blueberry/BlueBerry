@@ -1,8 +1,11 @@
+import { BodyContainer } from "../ui";
+import TrendReceipt from "../component/TrendReceipt";
+
 const Trend = () => {
   return(
-    <div>
-      <h1>Trend</h1>
-    </div>
+  	<BodyContainer>
+		<TrendReceipt />
+	</BodyContainer>
   )
 }
 
