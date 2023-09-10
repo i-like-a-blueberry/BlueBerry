@@ -9,7 +9,7 @@ type Props = {
 const Receipt = ({ langs }: Props) => {
 
     return (
-        <Card  shadow='md'>
+        <Card  shadow='md' mb={"5%"}>
             <CardBody
                 borderStyle="solid"
                 borderWidth="5px"

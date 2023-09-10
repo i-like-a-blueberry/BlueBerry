@@ -3,7 +3,6 @@ import { BodyContainer } from '../ui';
 import { db } from '../config/firebase';
 import { collection, getDocs, query } from '@firebase/firestore';
 import Receipt from '../component/Receipt';
-import { orderBy } from 'lodash';
 
 const Everyones = () => {
   const [receipts, setReceipts] = useState<string[]>([]);
