@@ -24,11 +24,6 @@ const NavBar = () => {
 						みんなのレシート
 					</GhostButton>
 				</Link>
-				<Link to="/trend">
-					<GhostButton underlined={pathname == "/trend"}>
-						トレンド
-					</GhostButton>
-				</Link>
 			</Box>
 		</Box>
 	)

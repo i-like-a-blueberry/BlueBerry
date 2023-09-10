@@ -6,12 +6,8 @@ import { getRepos, getLangs } from '../api';
 import errorHandler from '../api/errorHandling';
 import { RepeatIcon, DownloadIcon } from '@chakra-ui/icons';
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
 import { addReceipt } from '../api/addReceipt';
-
-=======
 import * as htmlToImage from "html-to-image";
->>>>>>> 5ad02eb4b445061b58cc3f52458cae106629be9f
 
 interface LangData {
     [key: string]: number;
@@ -21,9 +17,9 @@ const Home = () => {
     const [gitHubId, setGitHubId] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [langUsed, setLangUsed] = useState<object>({});
-	const [isSucceeded, setIsSucceeded] = useState<boolean>(false);
+    const [isSucceeded, setIsSucceeded] = useState<boolean>(false);
     const toast = useToast();
-	const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const resStatus = () => {
         toast({
@@ -35,15 +31,15 @@ const Home = () => {
         })
     }
 
-	const toPng = () => {
-		htmlToImage.toPng(document.getElementById(gitHubId))
-			.then(function (dataUrl){
-				const a = document.createElement('a')
-				a.download = 'Image.png';
-    			a.href = dataUrl;
-    			a.click();
-			})
-	}
+    const toPng = () => {
+        htmlToImage.toPng(document.getElementById(gitHubId))
+            .then(function (dataUrl: string) {
+                const a = document.createElement('a')
+                a.download = 'Image.png';
+                a.href = dataUrl;
+                a.click();
+            })
+    }
 
 
     const langsSum = async (data: { languages_url: string }[]) => {
@@ -77,15 +73,15 @@ const Home = () => {
         setIsLoading(true);
         if (gitHubId) {
             const res = await getRepos(gitHubId).catch((error) => {
-				resStatus();
-				console.log("ejdfjdlsa;jfdkls;ajfdk;lsa")
+                resStatus();
+                console.log("ejdfjdlsa;jfdkls;ajfdk;lsa")
                 errorHandler(error);
             });
             if (res) {
                 const data = res.data;
                 await langsSum(data);
                 setIsLoading(false);
-				setIsSucceeded(true);
+                setIsSucceeded(true);
                 return;
             }
         }
@@ -101,48 +97,39 @@ const Home = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setGitHubId(e.target.value);
     };
-<<<<<<< HEAD
-    
-    return (
-		<Box>
-        	<BodyContainer width={"100%"}>
-=======
-
-    useEffect(() => {}, [])
 
     return (
-        	<BodyContainer width={"400px"}>
->>>>>>> 5ad02eb4b445061b58cc3f52458cae106629be9f
-								{(() => {
-					if(!isSucceeded){
-						return (
-							<>
-								<Text fontSize={"2xl"}  m="16px 0">
-									あなたの技術スタックをレシートにする
-								</Text>
-        	    				<Input type="text" value={gitHubId} variant={"filled"} placeholder={"your GitHub ID"} onChange={handleInputChange} />
-								<Box pt={"40px"}>
-        	    					<NewButton isLoading={isLoading} onClick={onsubmit}>
-										レシートを発行する
-									</NewButton>
-								</Box>
-							</>
-						)
-					} else {
-						return (
-							<>
-								<Flex w="100%" m="8px 0">
-									<IconButton shadow="md" mr="8px"  onClick={() => navigate(0)}  icon={<RepeatIcon />}/>
-									<IconButton shadow="md" colorScheme="teal" onClick={() => toPng()} icon={<DownloadIcon />} />
-								</Flex>
-        	   					<Box id={gitHubId}>	
-									<Receipt langs={langUsed}/>
-								</Box>
-							</>
-						)
-					}
-				})()}
-        	</BodyContainer>
+        <BodyContainer width={"400px"}>
+            {(() => {
+                if (!isSucceeded) {
+                    return (
+                        <>
+                            <Text fontSize={"2xl"} m="16px 0">
+                                あなたの技術スタックをレシートにする
+                            </Text>
+                            <Input type="text" value={gitHubId} variant={"filled"} placeholder={"your GitHub ID"} onChange={handleInputChange} />
+                            <Box pt={"40px"}>
+                                <NewButton isLoading={isLoading} onClick={onsubmit}>
+                                    レシートを発行する
+                                </NewButton>
+                            </Box>
+                        </>
+                    )
+                } else {
+                    return (
+                        <>
+                            <Flex w="100%" m="8px 0">
+                                <IconButton shadow="md" mr="8px" onClick={() => navigate(0)} icon={<RepeatIcon />} />
+                                <IconButton shadow="md" colorScheme="teal" onClick={() => toPng()} icon={<DownloadIcon />} />
+                            </Flex>
+                            <Box id={gitHubId}>
+                                <Receipt langs={langUsed} />
+                            </Box>
+                        </>
+                    )
+                }
+            })()}
+        </BodyContainer>
     )
 }
 

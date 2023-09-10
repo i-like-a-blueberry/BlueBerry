@@ -1,38 +1,33 @@
 import { useState, useEffect } from 'react';
 import { BodyContainer } from '../ui';
 import { db } from '../config/firebase';
-import { collection, getDocs } from '@firebase/firestore';
+import { collection, getDocs, query } from '@firebase/firestore';
 import Receipt from '../component/Receipt';
-import TrendReceipt from "../component/TrendReceipt";
+import { orderBy } from 'lodash';
 
-
-
-
-const Trend = () => {
+const Everyones = () => {
   const [receipts, setReceipts] = useState<string[]>([]);
 
   useEffect(() => {
     const receiptsCollectionRef = collection(db, 'receipts')
+    const q = query(receiptsCollectionRef, orderBy('HTML'))
     getDocs(receiptsCollectionRef).then((querySnapshot) => {
       setReceipts(
-        querySnapshot.docs.foreach((doc) => {
-          const data = doc.data();
-
-          for (const filled in data) {
-            if (filled in counts) {
-              counts
-            }
-          }
-        }
-        )
+      querySnapshot.docs.map((doc) => ({ ...doc.data()}))
       );
     });
   }, []);
-
+  const data = setReceipts;
+  console.log(receipts.map)
   return (
     <BodyContainer>
-      <TrendReceipt />
+      <>
+      {receipts.map((receipts) => (
+        <Receipt langs={receipts} />
+      ))}
+      </>
     </BodyContainer>
   )
 }
-export default Trend;
+
+export default Everyones
