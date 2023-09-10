@@ -7,6 +7,7 @@ import errorHandler from '../api/errorHandling';
 import { RepeatIcon, DownloadIcon } from '@chakra-ui/icons';
 import { useNavigate } from "react-router-dom";
 import * as htmlToImage from "html-to-image";
+import Tweet from "../component/TwitterLink"
 
 interface LangData {
     [key: string]: number;
@@ -124,7 +125,7 @@ const Home = () => {
 									<IconButton shadow="md" colorScheme="teal" onClick={() => toPng()} icon={<DownloadIcon />} />
 								</Flex>
         	   					<Box id={gitHubId}>	
-									<Receipt langs={langUsed}/>
+									<Receipt langs={langUsed} gitHubId={gitHubId}/>
 								</Box>
 							</>
 						)
