@@ -4,7 +4,6 @@ import Receipt from '../component/Receipt';
 import { Box, useToast, Input, Text, IconButton } from "@chakra-ui/react";
 import { getRepos, getLangs } from '../api';
 import errorHandler from '../api/errorHandling';
-import NavBar from '../component/NavBar';
 import { RepeatIcon } from '@chakra-ui/icons';
 import { useNavigate } from "react-router-dom";
 
