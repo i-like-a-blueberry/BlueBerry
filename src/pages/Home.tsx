@@ -123,7 +123,7 @@ const Home = () => {
                                 <IconButton shadow="md" colorScheme="teal" onClick={() => toPng()} icon={<DownloadIcon />} />
                             </Flex>
                             <Box id={gitHubId}>
-                                <Receipt langs={langUsed} />
+                                <Receipt langs={langUsed} gitHubId={gitHubId} />
                             </Box>
                         </>
                     )

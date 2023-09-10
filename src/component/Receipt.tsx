@@ -2,11 +2,12 @@ import { Card, CardBody, Text, Spacer, Flex, Box } from "@chakra-ui/react";
 import { Day } from "../api/day";
 
 type Props = {
-    langs: object[]
+    langs: object[],
+	gitHubId: string
 }
 
 
-const Receipt = ({ langs }: Props) => {
+const Receipt = ({ langs,  gitHubId }: Props) => {
 
     return (
         <Card  shadow='md' mb={"5%"}>
@@ -77,9 +78,16 @@ const Receipt = ({ langs }: Props) => {
                         )
                     }
                 })()}
+				<Text
+                    fontSize="xl"
+                    fontWeight="bold"
+                    textAlign={"center"}
+                    mr={"30%"}
+                    ml={"30%"}
+				>
+					{gitHubId} 様
+				</Text>
             </CardBody>
-            {/*  お会計*/}
-            <span></span>
         </Card>
     )
 }
